@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.item_sudoku, items);
 
-        GridView gridView = (GridView) findViewById(R.id.gridView1);
+        SquareGridView gridView = (SquareGridView) findViewById(R.id.gridView1);
         gridView.setVerticalSpacing(1);
         gridView.setHorizontalSpacing(1);
         gridView.setAdapter(arrayAdapter);
