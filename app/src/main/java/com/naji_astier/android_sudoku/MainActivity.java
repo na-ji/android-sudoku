@@ -1,30 +1,52 @@
 package com.naji_astier.android_sudoku;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*List<String> items = new ArrayList<String>();
-        for (int i = 1; i <= 81; i++) {
-            items.add(Integer.toString(i));
-        }*/
-
         SudokuGrid sudokuGrid = Sudoku.getExampleGrid();
 
-        SudokuAdapter<Element> arrayAdapter = new SudokuAdapter<>(this, R.layout.item_sudoku, sudokuGrid.toList());
+        final SudokuAdapter<Element> arrayAdapter = new SudokuAdapter<>(this, R.layout.item_sudoku, sudokuGrid.toList());
 
-        SquareGridView gridView = (SquareGridView) findViewById(R.id.gridView1);
+        final SquareGridView gridView = (SquareGridView) findViewById(R.id.gridView1);
         gridView.setVerticalSpacing(1);
         gridView.setHorizontalSpacing(1);
         gridView.setAdapter(arrayAdapter);
+
+
+        final Handler handler = new Handler();
+        Button button = (Button) findViewById(R.id.button);
+        
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        final SudokuGrid sudokuGrid = Sudoku.generateValidGrid();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                arrayAdapter.clear();
+                                arrayAdapter.addAll(sudokuGrid.toList());
+                                arrayAdapter.notifyDataSetChanged();
+                                gridView.setAdapter(arrayAdapter);
+                            }
+                        });
+                    }
+                };
+                thread.start();
+            }
+        });
     }
 
     @Override
