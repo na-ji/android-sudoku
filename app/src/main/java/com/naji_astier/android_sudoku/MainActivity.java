@@ -3,14 +3,8 @@ package com.naji_astier.android_sudoku;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.GridView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,12 +15,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        List<String> items = new ArrayList<String>();
+        /*List<String> items = new ArrayList<String>();
         for (int i = 1; i <= 81; i++) {
             items.add(Integer.toString(i));
-        }
+        }*/
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.item_sudoku, items);
+        SudokuGrid sudokuGrid = Sudoku.getExampleGrid();
+
+        SudokuAdapter<Element> arrayAdapter = new SudokuAdapter<>(this, R.layout.item_sudoku, sudokuGrid.toList());
 
         SquareGridView gridView = (SquareGridView) findViewById(R.id.gridView1);
         gridView.setVerticalSpacing(1);
