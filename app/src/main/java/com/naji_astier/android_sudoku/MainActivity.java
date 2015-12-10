@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
         SudokuGrid sudokuGrid = Sudoku.getExampleGrid();
 
-        final SudokuAdapter<Element> arrayAdapter = new SudokuAdapter<>(this, R.layout.item_sudoku, sudokuGrid.toList());
+        final SudokuAdapter<Element> arrayAdapter = new SudokuAdapter<>(this, R.layout.item_sudoku, sudokuGrid);
 
         final SquareGridView gridView = (SquareGridView) findViewById(R.id.gridView1);
         gridView.setVerticalSpacing(1);
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Handler handler = new Handler();
         Button button = (Button) findViewById(R.id.button);
-        
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Thread thread = new Thread() {
@@ -36,9 +36,7 @@ public class MainActivity extends AppCompatActivity {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                arrayAdapter.clear();
-                                arrayAdapter.addAll(sudokuGrid.toList());
-                                arrayAdapter.notifyDataSetChanged();
+                                arrayAdapter.setSudokuGrid(sudokuGrid);
                                 gridView.setAdapter(arrayAdapter);
                             }
                         });

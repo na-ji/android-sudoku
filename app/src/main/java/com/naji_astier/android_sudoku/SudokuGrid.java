@@ -2,6 +2,7 @@ package com.naji_astier.android_sudoku;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.naji_astier.android_sudoku.Element;
 
 /**
  * Sudoku grid.

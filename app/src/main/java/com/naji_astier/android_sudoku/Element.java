@@ -10,8 +10,7 @@ import android.util.SparseArray;
  */
 public enum Element {
 
-	NULL(0), ONE(1), TWO(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7), HEIGHT(
-			8), NINE(9);
+	NULL(0), ONE(1), TWO(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7), EIGHT(8), NINE(9);
 
 	private final Byte num;
 
