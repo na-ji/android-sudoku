@@ -16,18 +16,10 @@ public class SudokuAdapter<Element> extends ArrayAdapter<Element> {
     private SudokuGrid sudokuGrid;
     private List<Integer> conflictPosition;
 
-    public SudokuAdapter(Context context, int resource, List<Element> objects) {
-        super(context, resource, objects);
-        this.conflictPosition = new ArrayList<>();
-    }
-
     public SudokuAdapter(Context context, int resource, SudokuGrid grid) {
-        this(context, resource, (List<Element>) grid.toList());
+        super(context, resource, (List<Element>) grid.toList());
         this.sudokuGrid = grid;
-    }
-
-    public SudokuGrid getSudokuGrid() {
-        return sudokuGrid;
+        this.conflictPosition = new ArrayList<>();
     }
 
     public void setSudokuGrid(SudokuGrid sudokuGrid) {
@@ -35,7 +27,6 @@ public class SudokuAdapter<Element> extends ArrayAdapter<Element> {
         this.clear();
         this.addAll((List<Element>) this.sudokuGrid.toList());
         conflictPosition.clear();
-        this.notifyDataSetChanged();
     }
 
     @Override
@@ -45,12 +36,13 @@ public class SudokuAdapter<Element> extends ArrayAdapter<Element> {
         }
 
         final SquareEditText set = (SquareEditText) convertView;
+        final byte row = SudokuGrid.getRow(position);
+        final byte cell = SudokuGrid.getCell(position);
 
         set.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                byte row = SudokuGrid.getRow(position);
-                byte cell = SudokuGrid.getCell(position);
+                // We remove all the conflict cell at position
                 conflictPosition.remove(Integer.valueOf(position));
                 Collection<Sudoku.Coord> coordArrayList = Sudoku.checkValue(sudokuGrid, row, cell);
                 for (Sudoku.Coord coord : coordArrayList) {
@@ -61,8 +53,6 @@ public class SudokuAdapter<Element> extends ArrayAdapter<Element> {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                byte row = SudokuGrid.getRow(position);
-                byte cell = SudokuGrid.getCell(position);
                 com.naji_astier.android_sudoku.Element element = com.naji_astier.android_sudoku.Element.from(charSequence.toString());
 
                 Log.d("AndroidSudoku", String.format("Position %d -> (%d, %d) = %s", position, row, cell, charSequence.toString()));
@@ -70,11 +60,12 @@ public class SudokuAdapter<Element> extends ArrayAdapter<Element> {
                 sudokuGrid.set(row, cell, element);
                 Collection<Sudoku.Coord> coordArrayList = Sudoku.checkValue(sudokuGrid, row, cell);
 
+                // And we add conflicts cells if there are any
                 if (coordArrayList.size() > 0) {
                     conflictPosition.add(position);
                     Log.d("AndroidSudoku", String.format("Conflict size : %d", coordArrayList.size()));
                     for (Sudoku.Coord coord : coordArrayList) {
-                        int pos = SudokuGrid.getPosition(coord.row, coord.cell);
+                        Integer pos = SudokuGrid.getPosition(coord.row, coord.cell);
                         conflictPosition.add(pos);
                     }
                 }

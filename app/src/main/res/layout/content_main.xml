@@ -18,12 +18,14 @@
         android:gravity="center"
         android:layout_margin="0dp"
         android:stretchMode="columnWidth"
+        android:verticalSpacing="1dp"
+        android:horizontalSpacing="1dp"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
     <Button
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:text="Generer"
+        android:text="@string/action_generate"
         android:id="@+id/button"
         android:drawableRight="@drawable/button_icon"
         android:drawableEnd="@drawable/button_icon"/>
